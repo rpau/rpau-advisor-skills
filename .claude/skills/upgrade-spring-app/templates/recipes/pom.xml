@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>@GROUP_ID@</groupId>
+  <artifactId>@ARTIFACT_ID@</artifactId>
+  <version>@VERSION@</version>
+  <packaging>jar</packaging>
+
+  <name>@FOLDER@ @SLUG@ upgrade recipes</name>
+  <description>OpenRewrite recipes learned while upgrading @FOLDER@ (@SLUG@). Installed to the local Maven repository only.</description>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- rewrite-test pulls an older junit-jupiter-api than the engine; the BOM keeps them aligned. -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.12.2</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openrewrite.recipe</groupId>
+        <artifactId>rewrite-recipe-bom</artifactId>
+        <version>2.23.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.openrewrite</groupId>
+      <artifactId>rewrite-java</artifactId>
+    </dependency>
+    <!-- Required at runtime: JavaParser.fromJavaVersion() and RewriteTest fail without a Java parser. -->
+    <dependency>
+      <groupId>org.openrewrite</groupId>
+      <artifactId>rewrite-java-17</artifactId>
+    </dependency>
+    <!-- Add rewrite-yaml / rewrite-xml here only if a recipe changes YAML or XML. -->
+
+    <dependency>
+      <groupId>org.openrewrite</groupId>
+      <artifactId>rewrite-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Add test-scope dependencies that provide the real library types your recipes rewrite or emit
+         (a JavaTemplate cannot attribute a type it cannot see). -->
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- The default Surefire of Maven 3.8 silently runs 0 JUnit 5 tests. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>

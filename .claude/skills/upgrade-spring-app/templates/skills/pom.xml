@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Modelled on https://github.com/Broadcom/acme-upgrade-skills : packages skills/<name>/SKILL.md into one zip. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>@GROUP_ID@</groupId>
+  <artifactId>@ARTIFACT_ID@</artifactId>
+  <version>@VERSION@</version>
+  <packaging>jar</packaging>
+
+  <name>@FOLDER@ @SLUG@ upgrade skills</name>
+  <description>Claude Code skills learned while upgrading @FOLDER@ (@SLUG@). Installed to the local Maven repository only.</description>
+
+  <build>
+    <plugins>
+      <!-- No jar: the zip produced by the assembly below is the main artifact (type zip). -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.4.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/skills.xml</descriptor>
+              </descriptors>
+              <finalName>${project.artifactId}-${project.version}</finalName>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
